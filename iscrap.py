@@ -10,6 +10,7 @@ try:
 	loop = int(input("Enter Number of images to download:"))
 	i=1
 	t=loop
+	folderName = input("Enter Folder Name (New folder will be created in current dir):")
 	while(loop):
 		print("Downloading "+ str(int((i/t)*100)) +"%...")
 		i=i+1
@@ -22,20 +23,17 @@ try:
 		respData = respData.replace("\\t","\t")
 		respData = respData.replace("</html>\n\n'","</html>")
 		respData = respData.replace("b'<","<")
-		save = open('data.html','w')
-		save.write(respData)
-		save.close()
 		image = re.findall(r'<div id="comic">\n<img src="(.*?)"',respData)
 		nextl = re.findall(r'<div id="comic">\n<img src="(.*?)"',respData)
 		for img in image:
-			if not os.path.exists('images'):
-				os.makedirs('images')
+			if not os.path.exists(folderName):
+				os.makedirs(folderName)
 			imgname = img.split('/')[-1]
-			idata = urllib.request.urlretrieve("https:"+img,"images/"+imgname)
+			idata = urllib.request.urlretrieve("https:"+img,folderName+"/"+imgname)
 			
 		loop-=1
 	
-	print("Images Saved in images/")
+	print("Images Saved in "+folderName+"/")
 except Exception as e:
 	print(e)
 	print(url)
